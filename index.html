@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sign‑In (two‑step flow)</title>
+  <title>Google Sign‑In (flow + loading + reset)</title>
   <!-- Google Sans / Roboto & Material Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,6 @@
       color: #202124;
     }
 
-    /* main card */
     .login-card {
       width: 100%;
       max-width: 450px;
@@ -36,6 +35,7 @@
       border-radius: 8px;
       background: #fff;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      position: relative;
     }
 
     /* Google logo */
@@ -49,12 +49,12 @@
       font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
       margin-bottom: 0px;
     }
-    .google-logo span:nth-child(1) { color: #4285F4; } /* G */
-    .google-logo span:nth-child(2) { color: #EA4335; } /* o */
-    .google-logo span:nth-child(3) { color: #FBBC05; } /* o */
-    .google-logo span:nth-child(4) { color: #4285F4; } /* g */
-    .google-logo span:nth-child(5) { color: #34A853; } /* l */
-    .google-logo span:nth-child(6) { color: #EA4335; } /* e */
+    .google-logo span:nth-child(1) { color: #4285F4; }
+    .google-logo span:nth-child(2) { color: #EA4335; }
+    .google-logo span:nth-child(3) { color: #FBBC05; }
+    .google-logo span:nth-child(4) { color: #4285F4; }
+    .google-logo span:nth-child(5) { color: #34A853; }
+    .google-logo span:nth-child(6) { color: #EA4335; }
 
     .signin-title {
       font-size: 24px;
@@ -76,7 +76,7 @@
       text-align: center;
     }
 
-    /* email display (only shown on password screen) */
+    /* email display (password screen) */
     .email-display {
       display: flex;
       align-items: center;
@@ -91,6 +91,7 @@
       width: fit-content;
       margin-left: auto;
       margin-right: auto;
+      cursor: pointer;
     }
     .email-display .material-symbols-outlined {
       font-size: 18px;
@@ -120,11 +121,10 @@
 
     .input-field:focus {
       border: 2px solid #1a73e8;
-      padding: 12px 14px; /* maintain height when border widens */
+      padding: 12px 14px;
       box-shadow: none;
     }
 
-    /* floating label */
     .floating-label {
       position: absolute;
       left: 16px;
@@ -151,7 +151,7 @@
       color: transparent;
     }
 
-    /* forgot email/password link */
+    /* links */
     .forgot-link {
       margin-top: 4px;
       margin-bottom: 12px;
@@ -171,27 +171,6 @@
       margin-left: -2px;
     }
 
-    /* back to email link (on password screen) */
-    .back-link {
-      margin-top: 4px;
-      margin-bottom: 12px;
-    }
-    .back-link a {
-      color: #1a73e8;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 14px;
-      display: inline-block;
-      padding: 4px 0;
-    }
-    .back-link a:hover {
-      background: #f0f6fe;
-      border-radius: 4px;
-      padding: 4px 2px 4px 2px;
-      margin-left: -2px;
-    }
-
-    /* guest mode text */
     .guest-text {
       font-size: 14px;
       color: #5f6368;
@@ -246,6 +225,11 @@
     .next-button:hover {
       background-color: #1b66c9;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .next-button:disabled {
+      background-color: #9aa0a6;
+      cursor: not-allowed;
+      box-shadow: none;
     }
 
     /* divider */
@@ -341,7 +325,6 @@
       color: #1a73e8;
     }
 
-    /* help icon */
     .help-icon {
       font-size: 20px;
       color: #5f6368;
@@ -368,10 +351,57 @@
     .screen.hidden {
       display: none;
     }
+
+    /* loading overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      border-radius: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .loading-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1a73e8;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading-text {
+      color: #202124;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
   <div class="login-card">
+    <!-- Loading overlay (hidden by default) -->
+    <div id="loadingOverlay" class="loading-overlay">
+      <div class="spinner"></div>
+      <div class="loading-text">Verifying email...</div>
+    </div>
+
     <!-- Google logo (always visible) -->
     <div class="google-logo">
       <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
@@ -382,33 +412,28 @@
       <h1 class="signin-title">Sign in</h1>
       <p class="subtitle">to continue to Gmail</p>
 
-      <!-- Email input (empty, no demo text) -->
+      <!-- Email input (empty) -->
       <div class="input-group">
         <input type="text" class="input-field" id="emailInput" placeholder=" " value="" aria-label="Email or phone">
         <label for="emailInput" class="floating-label">Email or phone</label>
       </div>
 
-      <!-- Forgot email? link -->
       <div class="forgot-link">
         <a href="#" onclick="alert('Forgot email demo'); return false;">Forgot email?</a>
       </div>
 
-      <!-- Guest mode message -->
       <div class="guest-text">
         Not your computer? Use Guest mode to sign in privately.
         <a href="#" onclick="alert('Learn more demo'); return false;">Learn more</a>
       </div>
 
-      <!-- Actions -->
       <div class="actions">
         <button class="create-account" onclick="alert('Create account demo')">Create account</button>
         <button class="next-button" id="toPasswordBtn">Next</button>
       </div>
 
-      <!-- Divider -->
       <div class="divider">or</div>
 
-      <!-- Use another account -->
       <div class="alternate-account" onclick="alert('Switch account demo')">
         <span class="material-symbols-outlined">account_circle</span>
         <span>Use another account</span>
@@ -418,46 +443,39 @@
     <!-- SCREEN 2: PASSWORD (hidden initially) -->
     <div id="passwordScreen" class="screen hidden">
       <h1 class="signin-title">Welcome</h1>
-      <!-- Email display (will be filled dynamically) -->
       <div class="email-display" id="emailDisplay">
         <span class="material-symbols-outlined">account_circle</span>
         <span id="displayEmail"></span>
       </div>
 
-      <!-- Password input -->
       <div class="input-group">
         <input type="password" class="input-field" id="passwordInput" placeholder=" " value="">
         <label for="passwordInput" class="floating-label">Enter your password</label>
       </div>
 
-      <!-- Forgot password? link -->
       <div class="forgot-link">
         <a href="#" onclick="alert('Forgot password demo'); return false;">Forgot password?</a>
       </div>
 
-      <!-- Guest mode (same as before) -->
       <div class="guest-text">
         Not your computer? Use Guest mode to sign in privately.
         <a href="#" onclick="alert('Learn more demo'); return false;">Learn more</a>
       </div>
 
-      <!-- Actions -->
       <div class="actions">
         <button class="create-account" id="backToEmailBtn">← Back</button>
-        <button class="next-button" onclick="alert('Sign in demo — would authenticate')">Next</button>
+        <button class="next-button" id="signInBtn">Next</button>
       </div>
 
-      <!-- Divider -->
       <div class="divider">or</div>
 
-      <!-- Use another account (same as before) -->
       <div class="alternate-account" onclick="alert('Switch account demo')">
         <span class="material-symbols-outlined">account_circle</span>
         <span>Use another account</span>
       </div>
     </div>
 
-    <!-- Language selector & footer (common to both screens) -->
+    <!-- Language selector & footer (common) -->
     <div class="language-selector">
       <div class="lang-left">
         <span class="material-symbols-outlined help-icon" onclick="alert('Help center demo')">help</span>
@@ -478,87 +496,137 @@
 
   <script>
     (function() {
-      // Get references to screens and elements
+      // Elements
       const emailScreen = document.getElementById('emailScreen');
       const passwordScreen = document.getElementById('passwordScreen');
       const emailInput = document.getElementById('emailInput');
       const toPasswordBtn = document.getElementById('toPasswordBtn');
       const backToEmailBtn = document.getElementById('backToEmailBtn');
+      const signInBtn = document.getElementById('signInBtn');
       const displayEmailSpan = document.getElementById('displayEmail');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const passwordInput = document.getElementById('passwordInput');
 
-      // Helper to show email screen, hide password screen
-      function showEmailScreen() {
+      // Helper: show email screen, clear fields
+      function resetToEmailScreen() {
+        // Clear email and password fields
+        emailInput.value = '';
+        passwordInput.value = '';
+        // Show email screen, hide password
         emailScreen.classList.remove('hidden');
         passwordScreen.classList.add('hidden');
-        // Focus email input for better UX
+        // Focus email
         emailInput.focus();
       }
 
-      // Helper to show password screen with the entered email
-      function showPasswordScreen() {
-        // Get email value, trim whitespace
-        let email = emailInput.value.trim();
+      // Helper: show password screen with email
+      function showPasswordScreen(email) {
+        displayEmailSpan.textContent = email;
+        emailScreen.classList.add('hidden');
+        passwordScreen.classList.remove('hidden');
+        passwordInput.focus();
+      }
+
+      // Email "Next" handler with loading simulation
+      function handleEmailNext() {
+        const email = emailInput.value.trim();
         
-        // If empty, show an alert (Google would validate properly)
         if (email === '') {
           alert('Please enter an email or phone number.');
           return;
         }
 
-        // Basic email format check (very simple)
-        if (!email.includes('@') && !email.match(/^\d+$/)) {
-          // Not an email and not only digits (phone) – just warn but proceed for demo
-          alert('Please enter a valid email or phone number (demo validation).');
-          // In a real flow you might block, but we'll still proceed for demo purposes
-        }
+        // Disable the Next button to prevent double-click
+        toPasswordBtn.disabled = true;
 
-        // Set the displayed email on password screen
-        displayEmailSpan.textContent = email;
+        // Show loading overlay
+        loadingOverlay.classList.add('visible');
 
-        // Hide email screen, show password screen
-        emailScreen.classList.add('hidden');
-        passwordScreen.classList.remove('hidden');
-        
-        // Focus password input
-        document.getElementById('passwordInput').focus();
+        // Simulate 2 seconds loading
+        setTimeout(() => {
+          // Hide loading
+          loadingOverlay.classList.remove('visible');
+
+          // Re-enable button
+          toPasswordBtn.disabled = false;
+
+          // Proceed to password screen
+          showPasswordScreen(email);
+        }, 2000);
       }
 
-      // Event listener for Next button on email screen
-      toPasswordBtn.addEventListener('click', showPasswordScreen);
+      // Password "Sign in" handler: reset to email screen
+      function handleSignIn() {
+        // Simple demo: if password empty, alert (just for UX)
+        if (passwordInput.value.trim() === '') {
+          alert('Please enter a password (demo).');
+          return;
+        }
+        
+        // Simulate sign-in and reset
+        alert('Signed in successfully! (demo) Resetting to email screen.');
+        
+        // Reset to email screen (clears both fields)
+        resetToEmailScreen();
+      }
 
-      // Event listener for Back button on password screen
-      backToEmailBtn.addEventListener('click', showEmailScreen);
+      // Event listeners
+      toPasswordBtn.addEventListener('click', handleEmailNext);
 
-      // Allow "Enter" key on email input to trigger Next
+      signInBtn.addEventListener('click', handleSignIn);
+
+      backToEmailBtn.addEventListener('click', () => {
+        // Just go back to email, keep email field as is (clear password)
+        passwordInput.value = '';
+        emailScreen.classList.remove('hidden');
+        passwordScreen.classList.add('hidden');
+        emailInput.focus();
+      });
+
+      // Click on email display goes back to email (keeps email field)
+      document.getElementById('emailDisplay').addEventListener('click', () => {
+        passwordInput.value = '';
+        emailScreen.classList.remove('hidden');
+        passwordScreen.classList.add('hidden');
+        emailInput.focus();
+      });
+
+      // Enter key on email input triggers Next
       emailInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          showPasswordScreen();
+          if (!toPasswordBtn.disabled) {
+            handleEmailNext();
+          }
         }
       });
 
-      // Allow "Enter" key on password input to trigger sign-in (optional)
-      const passwordInput = document.getElementById('passwordInput');
+      // Enter key on password input triggers Sign In
       passwordInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          alert('Sign in demo — would authenticate');
+          handleSignIn();
         }
       });
 
-      // Focus email input on page load
+      // Focus email on load
       emailInput.focus();
 
-      // Additional: if user clicks "Use another account" on password screen, go back to email and clear field? 
-      // For better UX, we'll add that behavior optionally. But keep simple.
-      // For now we just use the existing "Back" button.
-      // Also make the whole email display clickable to go back? Not necessary but could be nice.
-      // We'll add a small extra: clicking the email on password screen goes back to email.
-      document.querySelector('#emailDisplay').addEventListener('click', () => {
-        showEmailScreen();
+      // Optional: if user uses "Use another account" on password screen, reset to email and clear email field?
+      // We'll add that for better UX (clear email field when switching accounts)
+      const alternateAccounts = document.querySelectorAll('.alternate-account');
+      alternateAccounts.forEach(el => {
+        el.addEventListener('click', () => {
+          // If we're on password screen and they click use another account, reset to email and clear field
+          if (!passwordScreen.classList.contains('hidden')) {
+            resetToEmailScreen();
+          } else {
+            // On email screen, just clear field for convenience
+            emailInput.value = '';
+            emailInput.focus();
+          }
+        });
       });
-      // Make it look clickable
-      document.querySelector('#emailDisplay').style.cursor = 'pointer';
     })();
   </script>
 </body>
