@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sign‑In (matched design)</title>
+  <title>Google Sign‑In (two‑step flow)</title>
   <!-- Google Sans / Roboto & Material Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
       color: #202124;
     }
 
-    /* main card — exact Google dimensions & border */
+    /* main card */
     .login-card {
       width: 100%;
       max-width: 450px;
@@ -38,7 +38,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* Google logo — proper Product Sans/Google Sans weight & spacing */
+    /* Google logo */
     .google-logo {
       display: flex;
       justify-content: center;
@@ -56,7 +56,6 @@
     .google-logo span:nth-child(5) { color: #34A853; } /* l */
     .google-logo span:nth-child(6) { color: #EA4335; } /* e */
 
-    /* "Sign in" typography matches Google's 24px, regular */
     .signin-title {
       font-size: 24px;
       font-weight: 400;
@@ -77,7 +76,31 @@
       text-align: center;
     }
 
-    /* input field — matches Google's exact border, padding, radius */
+    /* email display (only shown on password screen) */
+    .email-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #202124;
+      background: #f8f9fa;
+      padding: 8px 12px;
+      border-radius: 16px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .email-display .material-symbols-outlined {
+      font-size: 18px;
+      color: #5f6368;
+    }
+    .email-display span:last-child {
+      font-weight: 500;
+    }
+
+    /* input field */
     .input-group {
       margin-bottom: 16px;
       position: relative;
@@ -101,7 +124,7 @@
       box-shadow: none;
     }
 
-    /* floating label — exact blue on focus */
+    /* floating label */
     .floating-label {
       position: absolute;
       left: 16px;
@@ -128,7 +151,7 @@
       color: transparent;
     }
 
-    /* forgot email link — Google uses 14px, 500 weight, blue */
+    /* forgot email/password link */
     .forgot-link {
       margin-top: 4px;
       margin-bottom: 12px;
@@ -148,7 +171,27 @@
       margin-left: -2px;
     }
 
-    /* guest mode — exact copy, font 14px */
+    /* back to email link (on password screen) */
+    .back-link {
+      margin-top: 4px;
+      margin-bottom: 12px;
+    }
+    .back-link a {
+      color: #1a73e8;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      display: inline-block;
+      padding: 4px 0;
+    }
+    .back-link a:hover {
+      background: #f0f6fe;
+      border-radius: 4px;
+      padding: 4px 2px 4px 2px;
+      margin-left: -2px;
+    }
+
+    /* guest mode text */
     .guest-text {
       font-size: 14px;
       color: #5f6368;
@@ -164,7 +207,7 @@
       text-decoration: underline;
     }
 
-    /* action row — align create account left, next right */
+    /* action row */
     .actions {
       display: flex;
       justify-content: space-between;
@@ -205,7 +248,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
-    /* OR divider — matches Google's style */
+    /* divider */
     .divider {
       display: flex;
       align-items: center;
@@ -227,7 +270,7 @@
       margin-left: 16px;
     }
 
-    /* alternate account entry — as seen on real Google (use another account) */
+    /* alternate account */
     .alternate-account {
       display: flex;
       align-items: center;
@@ -308,72 +351,113 @@
       color: #1a73e8;
     }
 
-    /* micro correction for material symbol alignment */
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
     }
 
-    /* blue focus ring on next & create (just for consistency) */
+    /* focus states */
     .next-button:focus-visible, .create-account:focus-visible, a:focus-visible {
       outline: 2px solid #1a73e8;
       outline-offset: 2px;
     }
 
-    /* demo watermark — very subtle */
-    .demo-hint {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 10px;
-      color: #e0e2e5;
-      border-top: 1px solid #f1f3f4;
-      padding-top: 10px;
+    /* screen visibility */
+    .screen {
+      display: block;
+    }
+    .screen.hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="login-card">
-    <!-- Google logo (exact visual) -->
+    <!-- Google logo (always visible) -->
     <div class="google-logo">
       <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
     </div>
 
-    <!-- main heading -->
-    <h1 class="signin-title">Sign in</h1>
-    <p class="subtitle">to continue to Gmail</p>
+    <!-- SCREEN 1: EMAIL (visible by default) -->
+    <div id="emailScreen" class="screen">
+      <h1 class="signin-title">Sign in</h1>
+      <p class="subtitle">to continue to Gmail</p>
 
-    <!-- email / phone field with prefilled demo value and floating label -->
-    <div class="input-group">
-      <input type="text" class="input-field" id="email" placeholder=" " value="demo.user@gmail.com" aria-label="Email or phone">
-      <label for="email" class="floating-label">Email or phone</label>
+      <!-- Email input (empty, no demo text) -->
+      <div class="input-group">
+        <input type="text" class="input-field" id="emailInput" placeholder=" " value="" aria-label="Email or phone">
+        <label for="emailInput" class="floating-label">Email or phone</label>
+      </div>
+
+      <!-- Forgot email? link -->
+      <div class="forgot-link">
+        <a href="#" onclick="alert('Forgot email demo'); return false;">Forgot email?</a>
+      </div>
+
+      <!-- Guest mode message -->
+      <div class="guest-text">
+        Not your computer? Use Guest mode to sign in privately.
+        <a href="#" onclick="alert('Learn more demo'); return false;">Learn more</a>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="create-account" onclick="alert('Create account demo')">Create account</button>
+        <button class="next-button" id="toPasswordBtn">Next</button>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">or</div>
+
+      <!-- Use another account -->
+      <div class="alternate-account" onclick="alert('Switch account demo')">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span>Use another account</span>
+      </div>
     </div>
 
-    <!-- forgot email link (exact style) -->
-    <div class="forgot-link">
-      <a href="#">Forgot email?</a>
+    <!-- SCREEN 2: PASSWORD (hidden initially) -->
+    <div id="passwordScreen" class="screen hidden">
+      <h1 class="signin-title">Welcome</h1>
+      <!-- Email display (will be filled dynamically) -->
+      <div class="email-display" id="emailDisplay">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span id="displayEmail"></span>
+      </div>
+
+      <!-- Password input -->
+      <div class="input-group">
+        <input type="password" class="input-field" id="passwordInput" placeholder=" " value="">
+        <label for="passwordInput" class="floating-label">Enter your password</label>
+      </div>
+
+      <!-- Forgot password? link -->
+      <div class="forgot-link">
+        <a href="#" onclick="alert('Forgot password demo'); return false;">Forgot password?</a>
+      </div>
+
+      <!-- Guest mode (same as before) -->
+      <div class="guest-text">
+        Not your computer? Use Guest mode to sign in privately.
+        <a href="#" onclick="alert('Learn more demo'); return false;">Learn more</a>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="create-account" id="backToEmailBtn">← Back</button>
+        <button class="next-button" onclick="alert('Sign in demo — would authenticate')">Next</button>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">or</div>
+
+      <!-- Use another account (same as before) -->
+      <div class="alternate-account" onclick="alert('Switch account demo')">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span>Use another account</span>
+      </div>
     </div>
 
-    <!-- guest mode message (identical copy) -->
-    <div class="guest-text">
-      Not your computer? Use Guest mode to sign in privately.
-      <a href="#">Learn more</a>
-    </div>
-
-    <!-- primary actions -->
-    <div class="actions">
-      <button class="create-account" onclick="alert('Create account demo (static)')">Create account</button>
-      <button class="next-button" onclick="alert('Next step — would proceed to password')">Next</button>
-    </div>
-
-    <!-- "or" divider -->
-    <div class="divider">or</div>
-
-    <!-- alternate account selection exactly as Google shows (with avatar icon + "Use another account") -->
-    <div class="alternate-account" onclick="alert('Switch account demo')">
-      <span class="material-symbols-outlined">account_circle</span>
-      <span>Use another account</span>
-    </div>
-
-    <!-- language selector & footer help/privacy/terms (exact matches) -->
+    <!-- Language selector & footer (common to both screens) -->
     <div class="language-selector">
       <div class="lang-left">
         <span class="material-symbols-outlined help-icon" onclick="alert('Help center demo')">help</span>
@@ -390,30 +474,91 @@
         <a href="#" onclick="alert('Terms demo'); return false;">Terms</a>
       </div>
     </div>
-
-    <!-- tiny clone identifier (keeps design clean) -->
-    <div class="demo-hint">⚡ design match — interactive clone</div>
   </div>
 
   <script>
     (function() {
-      // autofocus email field for convenience
-      document.getElementById('email').focus();
+      // Get references to screens and elements
+      const emailScreen = document.getElementById('emailScreen');
+      const passwordScreen = document.getElementById('passwordScreen');
+      const emailInput = document.getElementById('emailInput');
+      const toPasswordBtn = document.getElementById('toPasswordBtn');
+      const backToEmailBtn = document.getElementById('backToEmailBtn');
+      const displayEmailSpan = document.getElementById('displayEmail');
 
-      // add slight hover effect to alternate account via js? already in css.
-      // make help icon fully interactive
-      const help = document.querySelector('.help-icon');
-      help.addEventListener('click', (e) => {
-        alert('Google Help (demo)');
-      });
+      // Helper to show email screen, hide password screen
+      function showEmailScreen() {
+        emailScreen.classList.remove('hidden');
+        passwordScreen.classList.add('hidden');
+        // Focus email input for better UX
+        emailInput.focus();
+      }
 
-      // optional: pressing "Enter" on email triggers next demo
-      document.getElementById('email').addEventListener('keypress', (e) => {
+      // Helper to show password screen with the entered email
+      function showPasswordScreen() {
+        // Get email value, trim whitespace
+        let email = emailInput.value.trim();
+        
+        // If empty, show an alert (Google would validate properly)
+        if (email === '') {
+          alert('Please enter an email or phone number.');
+          return;
+        }
+
+        // Basic email format check (very simple)
+        if (!email.includes('@') && !email.match(/^\d+$/)) {
+          // Not an email and not only digits (phone) – just warn but proceed for demo
+          alert('Please enter a valid email or phone number (demo validation).');
+          // In a real flow you might block, but we'll still proceed for demo purposes
+        }
+
+        // Set the displayed email on password screen
+        displayEmailSpan.textContent = email;
+
+        // Hide email screen, show password screen
+        emailScreen.classList.add('hidden');
+        passwordScreen.classList.remove('hidden');
+        
+        // Focus password input
+        document.getElementById('passwordInput').focus();
+      }
+
+      // Event listener for Next button on email screen
+      toPasswordBtn.addEventListener('click', showPasswordScreen);
+
+      // Event listener for Back button on password screen
+      backToEmailBtn.addEventListener('click', showEmailScreen);
+
+      // Allow "Enter" key on email input to trigger Next
+      emailInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          document.querySelector('.next-button').click();
+          showPasswordScreen();
         }
       });
+
+      // Allow "Enter" key on password input to trigger sign-in (optional)
+      const passwordInput = document.getElementById('passwordInput');
+      passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          alert('Sign in demo — would authenticate');
+        }
+      });
+
+      // Focus email input on page load
+      emailInput.focus();
+
+      // Additional: if user clicks "Use another account" on password screen, go back to email and clear field? 
+      // For better UX, we'll add that behavior optionally. But keep simple.
+      // For now we just use the existing "Back" button.
+      // Also make the whole email display clickable to go back? Not necessary but could be nice.
+      // We'll add a small extra: clicking the email on password screen goes back to email.
+      document.querySelector('#emailDisplay').addEventListener('click', () => {
+        showEmailScreen();
+      });
+      // Make it look clickable
+      document.querySelector('#emailDisplay').style.cursor = 'pointer';
     })();
   </script>
 </body>
