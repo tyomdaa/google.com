@@ -1,1 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sign‑In (matched design)</title>
+  <!-- Google Sans / Roboto & Material Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      background: #fff;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      color: #202124;
+    }
+
+    /* main card — exact Google dimensions & border */
+    .login-card {
+      width: 100%;
+      max-width: 450px;
+      padding: 48px 40px 36px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* Google logo — proper Product Sans/Google Sans weight & spacing */
+    .google-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      margin-bottom: 0px;
+    }
+    .google-logo span:nth-child(1) { color: #4285F4; } /* G */
+    .google-logo span:nth-child(2) { color: #EA4335; } /* o */
+    .google-logo span:nth-child(3) { color: #FBBC05; } /* o */
+    .google-logo span:nth-child(4) { color: #4285F4; } /* g */
+    .google-logo span:nth-child(5) { color: #34A853; } /* l */
+    .google-logo span:nth-child(6) { color: #EA4335; } /* e */
+
+    /* "Sign in" typography matches Google's 24px, regular */
+    .signin-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.333;
+      margin-top: 16px;
+      margin-bottom: 0;
+      color: #202124;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #5f6368;
+      margin-top: 8px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    /* input field — matches Google's exact border, padding, radius */
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 13px 15px;
+      font-size: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      outline: none;
+      transition: border 0.15s, box-shadow 0.15s;
+      background: #fff;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+    }
+
+    .input-field:focus {
+      border: 2px solid #1a73e8;
+      padding: 12px 14px; /* maintain height when border widens */
+      box-shadow: none;
+    }
+
+    /* floating label — exact blue on focus */
+    .floating-label {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5f6368;
+      font-size: 16px;
+      transition: 0.15s ease all;
+      pointer-events: none;
+      background: #fff;
+      padding: 0 2px;
+      line-height: 1;
+    }
+
+    .input-field:focus + .floating-label,
+    .input-field:not(:placeholder-shown) + .floating-label {
+      transform: translateY(-150%) scale(0.85);
+      background: #fff;
+      padding: 0 4px;
+      color: #1a73e8;
+    }
+
+    .input-field::placeholder {
+      color: transparent;
+    }
+
+    /* forgot email link — Google uses 14px, 500 weight, blue */
+    .forgot-link {
+      margin-top: 4px;
+      margin-bottom: 12px;
+    }
+    .forgot-link a {
+      color: #1a73e8;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      display: inline-block;
+      padding: 4px 0;
+    }
+    .forgot-link a:hover {
+      background: #f0f6fe;
+      border-radius: 4px;
+      padding: 4px 2px 4px 2px;
+      margin-left: -2px;
+    }
+
+    /* guest mode — exact copy, font 14px */
+    .guest-text {
+      font-size: 14px;
+      color: #5f6368;
+      margin: 24px 0 24px;
+      line-height: 1.5;
+    }
+    .guest-text a {
+      color: #1a73e8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .guest-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* action row — align create account left, next right */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 12px 0 24px;
+    }
+
+    .create-account {
+      color: #1a73e8;
+      font-weight: 500;
+      font-size: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 8px 8px 0;
+      border-radius: 4px;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+    }
+    .create-account:hover {
+      background-color: #f6fafe;
+      padding: 8px;
+    }
+
+    .next-button {
+      background-color: #1a73e8;
+      color: white;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.25px;
+      padding: 9px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+    }
+    .next-button:hover {
+      background-color: #1b66c9;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* OR divider — matches Google's style */
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #9aa0a6;
+      font-size: 12px;
+      margin: 16px 0 20px;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #dadce0;
+    }
+    .divider::before {
+      margin-right: 16px;
+    }
+    .divider::after {
+      margin-left: 16px;
+    }
+
+    /* alternate account entry — as seen on real Google (use another account) */
+    .alternate-account {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-radius: 20px;
+      cursor: pointer;
+      width: fit-content;
+    }
+    .alternate-account:hover {
+      background-color: #f1f3f4;
+    }
+    .alternate-account .material-symbols-outlined {
+      color: #5f6368;
+      font-size: 20px;
+    }
+    .alternate-account span:last-child {
+      font-size: 14px;
+      font-weight: 500;
+      color: #3c4043;
+    }
+
+    /* language selector + footer */
+    .language-selector {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      font-size: 12px;
+      color: #5f6368;
+    }
+
+    .lang-left {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lang-left select {
+      border: none;
+      background: transparent;
+      font-size: 12px;
+      color: #1f1f1f;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      padding: 4px 20px 4px 4px;
+      border-radius: 4px;
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="%235f6368"><path d="M7 10l5 5 5-5H7z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 2px center;
+      appearance: none;
+    }
+    .lang-left select:hover {
+      background-color: #f2f2f2;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-links a {
+      color: #5f6368;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .footer-links a:hover {
+      color: #1a73e8;
+    }
+
+    /* help icon */
+    .help-icon {
+      font-size: 20px;
+      color: #5f6368;
+      cursor: pointer;
+    }
+    .help-icon:hover {
+      color: #1a73e8;
+    }
+
+    /* micro correction for material symbol alignment */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+
+    /* blue focus ring on next & create (just for consistency) */
+    .next-button:focus-visible, .create-account:focus-visible, a:focus-visible {
+      outline: 2px solid #1a73e8;
+      outline-offset: 2px;
+    }
+
+    /* demo watermark — very subtle */
+    .demo-hint {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 10px;
+      color: #e0e2e5;
+      border-top: 1px solid #f1f3f4;
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <!-- Google logo (exact visual) -->
+    <div class="google-logo">
+      <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+    </div>
+
+    <!-- main heading -->
+    <h1 class="signin-title">Sign in</h1>
+    <p class="subtitle">to continue to Gmail</p>
+
+    <!-- email / phone field with prefilled demo value and floating label -->
+    <div class="input-group">
+      <input type="text" class="input-field" id="email" placeholder=" " value="demo.user@gmail.com" aria-label="Email or phone">
+      <label for="email" class="floating-label">Email or phone</label>
+    </div>
+
+    <!-- forgot email link (exact style) -->
+    <div class="forgot-link">
+      <a href="#">Forgot email?</a>
+    </div>
+
+    <!-- guest mode message (identical copy) -->
+    <div class="guest-text">
+      Not your computer? Use Guest mode to sign in privately.
+      <a href="#">Learn more</a>
+    </div>
+
+    <!-- primary actions -->
+    <div class="actions">
+      <button class="create-account" onclick="alert('Create account demo (static)')">Create account</button>
+      <button class="next-button" onclick="alert('Next step — would proceed to password')">Next</button>
+    </div>
+
+    <!-- "or" divider -->
+    <div class="divider">or</div>
+
+    <!-- alternate account selection exactly as Google shows (with avatar icon + "Use another account") -->
+    <div class="alternate-account" onclick="alert('Switch account demo')">
+      <span class="material-symbols-outlined">account_circle</span>
+      <span>Use another account</span>
+    </div>
+
+    <!-- language selector & footer help/privacy/terms (exact matches) -->
+    <div class="language-selector">
+      <div class="lang-left">
+        <span class="material-symbols-outlined help-icon" onclick="alert('Help center demo')">help</span>
+        <select aria-label="Language" onchange="alert('Language changed to: ' + this.value + ' (demo)')">
+          <option value="English (United States)" selected>English (United States)</option>
+          <option value="español (España)">Español (España)</option>
+          <option value="français (France)">Français (France)</option>
+          <option value="deutsch (Deutschland)">Deutsch (Deutschland)</option>
+        </select>
+      </div>
+      <div class="footer-links">
+        <a href="#" onclick="alert('Help demo'); return false;">Help</a>
+        <a href="#" onclick="alert('Privacy demo'); return false;">Privacy</a>
+        <a href="#" onclick="alert('Terms demo'); return false;">Terms</a>
+      </div>
+    </div>
+
+    <!-- tiny clone identifier (keeps design clean) -->
+    <div class="demo-hint">⚡ design match — interactive clone</div>
+  </div>
+
+  <script>
+    (function() {
+      // autofocus email field for convenience
+      document.getElementById('email').focus();
+
+      // add slight hover effect to alternate account via js? already in css.
+      // make help icon fully interactive
+      const help = document.querySelector('.help-icon');
+      help.addEventListener('click', (e) => {
+        alert('Google Help (demo)');
+      });
+
+      // optional: pressing "Enter" on email triggers next demo
+      document.getElementById('email').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.querySelector('.next-button').click();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
